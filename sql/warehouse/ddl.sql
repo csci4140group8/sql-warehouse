@@ -28,19 +28,6 @@ CREATE TABLE `dw_projects` (
   PRIMARY KEY (`project_id`)
 );
 
-CREATE TABLE `dw_platform` (
-  `platform_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
-  `project_id` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `type` text CHARACTER SET utf8,
-  `depth` double DEFAULT NULL,
-  `name` text CHARACTER SET utf8 COLLATE utf8_bin,
-  `latitude` double DEFAULT NULL,
-  `longitude` double DEFAULT NULL,
-  PRIMARY KEY (`platform_id`),
-  KEY `fk_dw_platform_project` (`project_id`),
-  CONSTRAINT `fk_dw_platform_project` FOREIGN KEY (`project_id`) REFERENCES `dw_projects` (`project_id`)
-);
-
 CREATE TABLE `dw_time` (
   `time_id` datetime NOT NULL,
   `year` int(4) DEFAULT NULL,
@@ -51,6 +38,11 @@ CREATE TABLE `dw_time` (
   `minute` int(2) DEFAULT NULL,
   `second` int(2) DEFAULT NULL,
   PRIMARY KEY (`time_id`)
+);
+
+CREATE TABLE `dw_depth` (
+  `depth_id` double NOT NULL,
+  PRIMARY KEY (`depth_id`)
 );
 
 CREATE TABLE `dw_detections_fact` (
@@ -68,4 +60,18 @@ CREATE TABLE `dw_detections_fact` (
   CONSTRAINT `fk_dw_detections_fact_location` FOREIGN KEY (`location_id`) REFERENCES `dw_location` (`location_id`),
   CONSTRAINT `fk_dw_detections_fact_animal` FOREIGN KEY (`animal_id`) REFERENCES `dw_animals` (`animal_id`),
   CONSTRAINT `fk_dw_detections_fact_time` FOREIGN KEY (`time_id`) REFERENCES `dw_time` (`time_id`)
+);
+
+CREATE TABLE `dw_platform_fact` (
+  `project_id` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `location_id` int(11) NOT NULL,
+  `depth_id` double NOT NULL,
+  `count` bigint(21) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`project_id`, `location_id`, `depth_id`),
+  KEY `fk_dw_platform_fact_project` (`project_id`),
+  CONSTRAINT `fk_dw_platform_fact_project` FOREIGN KEY (`project_id`) REFERENCES `dw_projects` (`project_id`),
+  KEY `fk_dw_platform_fact_location` (`location_id`),
+  CONSTRAINT `fk_dw_platform_fact_location` FOREIGN KEY (`location_id`) REFERENCES `dw_location` (`location_id`),
+  KEY `fk_dw_platform_fact_depth` (`depth_id`),
+  CONSTRAINT `fk_dw_platform_fact_depth` FOREIGN KEY (`depth_id`) REFERENCES `dw_depth` (`depth_id`)
 );

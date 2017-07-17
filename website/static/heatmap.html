@@ -1,64 +1,62 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Heatmap of Detections</title>
-    <link rel="stylesheet" href="js/leaflet/leaflet.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-    <script type="text/javascript" src="js/leaflet/leaflet.js"></script>
-    <script type="text/javascript" src="js/heatmap.js"></script>
-    <script type="text/javascript" src="js/leaflet-heatmap.js"></script>
-  </head>
-  <body>
-    <div id="mapid" style="height:1000px;"></div>
-  </body>
-  <script type="text/javascript">
-    $(document).ready(function(){
 
-      $.getJSON( "json/heatmap_data.json").done(function(response){
-        var data = {
-          max: 1300,
-          data: response
-        };
+<head>
+  <meta charset="utf-8">
+  <title>Heatmap of Detections</title>
+  <link rel="stylesheet" href="/js/leaflet/leaflet.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <script type="text/javascript" src="/js/leaflet/leaflet.js"></script>
+  <script type="text/javascript" src="/js/heatmap.js"></script>
+  <script type="text/javascript" src="/js/leaflet-heatmap.js"></script>
+</head>
 
-        var cfg = {
-          // radius should be small ONLY if scaleRadius is true (or small radius is intended)
-          // if scaleRadius is false it will be the constant radius used in pixels
-          "radius": 0.2,
-          "maxOpacity": .7,
-          // scales the radius based on map zoom
-          "scaleRadius": true,
-          // if set to false the heatmap uses the global maximum for colorization
-          // if activated: uses the data maximum within the current map boundaries
-          //   (there will always be a red spot with useLocalExtremas true)
-          "useLocalExtrema": false,
-          // which field name in your data represents the latitude - default "lat"
-          latField: 'lat',
-          // which field name in your data represents the longitude - default "lng"
-          lngField: 'lng',
-          // which field name in your data represents the data value - default "value"
-          valueField: 'count'
-        };
-        var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-        	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-        	subdomains: 'abcd',
-        	maxZoom: 19
-        });
+<body>
+  <div id="mapid" style="height:1000px;"></div>
+</body>
 
-        var heatmapLayer = new HeatmapOverlay(cfg);
-        var mymap = L.map('mapid', {
-          center: new L.LatLng(25.6586, -80.3568),
-          zoom: 4,
-          layers: [positron, heatmapLayer]
-        });
+<script type="text/javascript">
+  $(document).ready(function () {
+    $.getJSON("/api/heatmap").done(function (response) {
+      var data = {
+        max: 1300,
+        data: response
+      };
 
-        heatmapLayer.setData(data);
+      var cfg = {
+        // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+        // if scaleRadius is false it will be the constant radius used in pixels
+        "radius": 0.2,
+        "maxOpacity": .7,
+        // scales the radius based on map zoom
+        "scaleRadius": true,
+        // if set to false the heatmap uses the global maximum for colorization
+        // if activated: uses the data maximum within the current map boundaries
+        //   (there will always be a red spot with useLocalExtremas true)
+        "useLocalExtrema": false,
+        // which field name in your data represents the latitude - default "lat"
+        latField: 'lat',
+        // which field name in your data represents the longitude - default "lng"
+        lngField: 'lng',
+        // which field name in your data represents the data value - default "value"
+        valueField: 'count'
+      };
+      var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
       });
 
+      var heatmapLayer = new HeatmapOverlay(cfg);
+      var mymap = L.map('mapid', {
+        center: new L.LatLng(25.6586, -80.3568),
+        zoom: 4,
+        layers: [positron, heatmapLayer]
+      });
 
-
-
+      heatmapLayer.setData(data);
     });
+  });
+</script>
 
-  </script>
 </html>

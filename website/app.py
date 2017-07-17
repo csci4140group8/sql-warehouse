@@ -3,6 +3,8 @@ import service
 
 APP = Flask(__name__)
 
+# Static Files
+
 @APP.route('/')
 def get_index():
     return send_file('static/index.html')
@@ -11,9 +13,17 @@ def get_index():
 def static_pages(path):
     return send_from_directory('static', path)
 
+# Utility endpoints, for determining the interactive bits
+
 @APP.route('/api/timesteps/<scale>')
 def get_timesteps(scale):
     return jsonify(service.getTimeSteps(scale))
+
+@APP.route('/api/project_ids')
+def get_project_ids():
+    return jsonify(service.getProjects())
+
+# Visualizations
 
 @APP.route('/api/heatmap')
 def get_heatmap():
@@ -27,7 +37,8 @@ def get_projects():
 
 @APP.route('/api/platforms')
 def get_platforms():
-    return 'platforms'
+    project_id = request.args.get('project_id')
+    return jsonify(service.getPlatforms(project_id))
 
 if __name__ == '__main__':
     APP.run(debug=True)

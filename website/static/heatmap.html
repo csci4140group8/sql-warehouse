@@ -48,6 +48,23 @@
 </body>
 
 <script type="text/javascript">
+  var monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  function monthNameFromIndex(idx) {
+    return monthNames[idx - 1];
+  }
+
+  function monthIndexFromName(name) {
+    for (var i = 0; i < monthNames.length; i++) {
+      if (monthNames[i] === name) {
+        return i + 1;
+      }
+    }
+  }
+
   $(document).ready(function () {
     $('.time-span-option').click(function (event) {
       console.log(event);      
@@ -75,6 +92,9 @@
         console.log(response);
         $('#time-value-options').empty();
         response.forEach(function (val) {
+          if (timeSpan === 'month') {
+            val = monthNameFromIndex(val);
+          }
           console.log('appending');
           $('#time-value-options').append('<li><a class="time-value-option" href="#">' + val + '</a></li>');
         });
@@ -121,6 +141,10 @@
     function refreshMap() {
       var timeSpan = $('#dropdown-label').text();
       var value = $('#value-dropdown-label').text();
+
+      if (timeSpan === 'By Month') {
+        value = monthIndexFromName(value);
+      }
 
       var queries;
 

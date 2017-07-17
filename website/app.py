@@ -33,7 +33,8 @@ def get_heatmap():
 
 @APP.route('/api/projects')
 def get_projects():
-    return 'projects'
+    project_id = request.args.get('project_id')
+    return jsonify(service.getProjectBoundaries(project_id))
 
 @APP.route('/api/platforms')
 def get_platforms():

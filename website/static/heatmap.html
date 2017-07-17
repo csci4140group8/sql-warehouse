@@ -70,7 +70,7 @@
 
   $(document).ready(function () {
     $('.time-span-option').click(function (event) {
-      console.log(event);      
+      console.log(event);
       $('#dropdown-label').text(event.target.text)
       $('#value-dropdown-label').text('Select Time')
       var timeSpan;
@@ -112,7 +112,7 @@
     var cfg = {
       // radius should be small ONLY if scaleRadius is true (or small radius is intended)
       // if scaleRadius is false it will be the constant radius used in pixels
-      "radius": 0.2,
+      "radius": 0.1,
       "maxOpacity": .7,
       // scales the radius based on map zoom
       "scaleRadius": true,

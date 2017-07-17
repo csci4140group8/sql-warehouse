@@ -58,14 +58,18 @@ def getTimeSteps(time_scale):
 
     return arr
 
-def getProjectBoundaries(project_id):
-    where = "WHERE dw_projects.project_id = '%s'" % (project_id) if project_id else ""
+def getProjectBoundaries(project_id = None):
+    where = "WHERE dw_platform_fact.project_id = '%s'" % (project_id) if project_id else ""
     statement = """
-        SELECT dw_projects.project_id, dw_projects.geospatial_lat_max AS lat_max, dw_projects.geospatial_lat_min AS lat_min, dw_projects.geospatial_lon_max AS lng_max, dw_projects.geospatial_lon_min AS lng_min
+        SELECT project_id, name, abstract,
+          geospatial_lat_max AS north_boundary,
+          geospatial_lat_min AS south_boundary,
+          geospatial_lon_max AS east_boundary,
+          geospatial_lon_min AS west_boundary
         FROM dw_projects
-        %s;
+        %s ;
     """ % (where)
-    
+
     return query(statement)
 
 def getProjects():
@@ -85,5 +89,5 @@ def getPlatforms(project_id):
         %s
         GROUP BY lat, lng;
     """ % (where)
-    
+
     return query(statement)

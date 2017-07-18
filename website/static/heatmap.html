@@ -2,183 +2,183 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <title>Heatmap of Detections</title>
+	<meta charset="utf-8">
+	<title>Heatmap of Detections</title>
 
-  <!-- jQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+	<!-- jQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-    crossorigin="anonymous">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	    crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	    crossorigin="anonymous"></script>
 
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="/js/leaflet/leaflet.css" />
-  <script type="text/javascript" src="/js/leaflet/leaflet.js"></script>
-  <script type="text/javascript" src="/js/heatmap.js"></script>
-  <script type="text/javascript" src="/js/leaflet-heatmap.js"></script>
+	<!-- Leaflet -->
+	<link rel="stylesheet" href="/js/leaflet/leaflet.css" />
+	<script type="text/javascript" src="/js/leaflet/leaflet.js"></script>
+	<script type="text/javascript" src="/js/heatmap.js"></script>
+	<script type="text/javascript" src="/js/leaflet-heatmap.js"></script>
 </head>
 
 <body>
-  <nav class="navbar navbar-default" style="margin-bottom: 0;">
-    <div class="container-fluid">
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="dropdown-label">All</span> <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a class="time-span-option" href="#">All</a></li>
-              <li><a class="time-span-option" href="#">By Year</a></li>
-              <li><a class="time-span-option" href="#">By Month</a></li>
-              <li><a class="time-span-option" href="#">By Week</a></li>
-            </ul>
-          </li>
-          <li id="time-value-select" class="dropdown" style="display: none;">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="value-dropdown-label">Select Time</span> <span class="caret"></span></a>
-            <ul id="time-value-options" class="dropdown-menu">
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <div id="mapid" style="height:calc(100vh - 50px);"></div>
+	<nav class="navbar navbar-default" style="margin-bottom: 0;">
+		<div class="container-fluid">
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="dropdown-label">All</span> <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a class="time-span-option" href="#">All</a></li>
+							<li><a class="time-span-option" href="#">By Year</a></li>
+							<li><a class="time-span-option" href="#">By Month</a></li>
+							<li><a class="time-span-option" href="#">By Week</a></li>
+						</ul>
+					</li>
+					<li id="time-value-select" class="dropdown" style="display: none;">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="value-dropdown-label">Select Time</span> <span class="caret"></span></a>
+						<ul id="time-value-options" class="dropdown-menu">
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div id="mapid" style="height:calc(100vh - 50px);"></div>
 </body>
 
 <script type="text/javascript">
-  var monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
+	var monthNames = [
+		"January", "February", "March", "April", "May", "June",
+		"July", "August", "September", "October", "November", "December"
+	];
 
-  function monthNameFromIndex(idx) {
-    return monthNames[idx - 1];
-  }
+	function monthNameFromIndex(idx) {
+		return monthNames[idx - 1];
+	}
 
-  function monthIndexFromName(name) {
-    for (var i = 0; i < monthNames.length; i++) {
-      if (monthNames[i] === name) {
-        return i + 1;
-      }
-    }
-  }
+	function monthIndexFromName(name) {
+		for (var i = 0; i < monthNames.length; i++) {
+			if (monthNames[i] === name) {
+				return i + 1;
+			}
+		}
+	}
 
-  $(document).ready(function () {
-    $('.time-span-option').click(function (event) {
-      console.log(event);
-      $('#dropdown-label').text(event.target.text)
-      $('#value-dropdown-label').text('Select Time')
-      var timeSpan;
-      switch (event.target.text) {
-        case 'All':
-          $('#time-value-select').css('display', 'none');
-          refreshMap();
-          return;
-        case 'By Year':
-          timeSpan = 'year';
-          $('#time-value-select').css('display', 'initial');
-          break;
-        case 'By Month':
-          timeSpan = 'month';
-          $('#time-value-select').css('display', 'initial');
-          break;
-        case 'By Week':
-          timeSpan = 'week';
-          $('#time-value-select').css('display', 'initial');
-          break;
-      }
-      $.getJSON("/api/timesteps/" + timeSpan).done(function (response) {
-        console.log(response);
-        $('#time-value-options').empty();
-        response.forEach(function (val) {
-          if (timeSpan === 'month') {
-            val = monthNameFromIndex(val);
-          }
-          console.log('appending');
-          $('#time-value-options').append('<li><a class="time-value-option" href="#">' + val + '</a></li>');
-        });
-        $('.time-value-option').click(function (event) {
-          $('#value-dropdown-label').text(event.target.text)
-          refreshMap();
-        });
-      });
-    });
+	$(document).ready(function () {
+		$('.time-span-option').click(function (event) {
+			console.log(event);
+			$('#dropdown-label').text(event.target.text)
+			$('#value-dropdown-label').text('Select Time')
+			var timeSpan;
+			switch (event.target.text) {
+				case 'All':
+					$('#time-value-select').css('display', 'none');
+					refreshMap();
+					return;
+				case 'By Year':
+					timeSpan = 'year';
+					$('#time-value-select').css('display', 'initial');
+					break;
+				case 'By Month':
+					timeSpan = 'month';
+					$('#time-value-select').css('display', 'initial');
+					break;
+				case 'By Week':
+					timeSpan = 'week';
+					$('#time-value-select').css('display', 'initial');
+					break;
+			}
+			$.getJSON("/api/timesteps/" + timeSpan).done(function (response) {
+				console.log(response);
+				$('#time-value-options').empty();
+				response.forEach(function (val) {
+					if (timeSpan === 'month') {
+						val = monthNameFromIndex(val);
+					}
+					console.log('appending');
+					$('#time-value-options').append('<li><a class="time-value-option" href="#">' + val + '</a></li>');
+				});
+				$('.time-value-option').click(function (event) {
+					$('#value-dropdown-label').text(event.target.text)
+					refreshMap();
+				});
+			});
+		});
 
-    var cfg = {
-      // radius should be small ONLY if scaleRadius is true (or small radius is intended)
-      // if scaleRadius is false it will be the constant radius used in pixels
-      "radius": 0.1,
-      "maxOpacity": .7,
-      // scales the radius based on map zoom
-      "scaleRadius": true,
-      // if set to false the heatmap uses the global maximum for colorization
-      // if activated: uses the data maximum within the current map boundaries
-      //   (there will always be a red spot with useLocalExtremas true)
-      "useLocalExtrema": false,
-      // which field name in your data represents the latitude - default "lat"
-      latField: 'lat',
-      // which field name in your data represents the longitude - default "lng"
-      lngField: 'lng',
-      // which field name in your data represents the data value - default "value"
-      valueField: 'count'
-    };
+		var cfg = {
+			// radius should be small ONLY if scaleRadius is true (or small radius is intended)
+			// if scaleRadius is false it will be the constant radius used in pixels
+			"radius": 0.1,
+			"maxOpacity": .7,
+			// scales the radius based on map zoom
+			"scaleRadius": true,
+			// if set to false the heatmap uses the global maximum for colorization
+			// if activated: uses the data maximum within the current map boundaries
+			//   (there will always be a red spot with useLocalExtremas true)
+			"useLocalExtrema": false,
+			// which field name in your data represents the latitude - default "lat"
+			latField: 'lat',
+			// which field name in your data represents the longitude - default "lng"
+			lngField: 'lng',
+			// which field name in your data represents the data value - default "value"
+			valueField: 'count'
+		};
 
-    var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-      subdomains: 'abcd',
-      maxZoom: 19
-    });
+		var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+			subdomains: 'abcd',
+			maxZoom: 19
+		});
 
-    var heatmapLayer = new HeatmapOverlay(cfg);
+		var heatmapLayer = new HeatmapOverlay(cfg);
 
-    var mymap = L.map('mapid', {
-      center: new L.LatLng(44.6488, -63.5752),
-      zoom: 7,
-      layers: [positron, heatmapLayer]
-    });
+		var mymap = L.map('mapid', {
+			center: new L.LatLng(44.6488, -63.5752),
+			zoom: 7,
+			layers: [positron, heatmapLayer]
+		});
 
-    function refreshMap() {
-      var timeSpan = $('#dropdown-label').text();
-      var value = $('#value-dropdown-label').text();
+		function refreshMap() {
+			var timeSpan = $('#dropdown-label').text();
+			var value = $('#value-dropdown-label').text();
 
-      if (timeSpan === 'By Month') {
-        value = monthIndexFromName(value);
-      }
+			if (timeSpan === 'By Month') {
+				value = monthIndexFromName(value);
+			}
 
-      var queries;
+			var queries;
 
-      switch (timeSpan) {
-        case 'All':
-          queries = "";
-          break;
-        case 'By Year':
-          queries = '?scale=year&value=' + value;
-          break;
-        case 'By Month':
-          queries = '?scale=month&value=' + value;
-          break;
-        case 'By Week':
-          queries = '?scale=week&value=' + value;
-          break;
-      }
+			switch (timeSpan) {
+				case 'All':
+					queries = "";
+					break;
+				case 'By Year':
+					queries = '?scale=year&value=' + value;
+					break;
+				case 'By Month':
+					queries = '?scale=month&value=' + value;
+					break;
+				case 'By Week':
+					queries = '?scale=week&value=' + value;
+					break;
+			}
 
-      $.getJSON("/api/heatmap" + queries).done(function (response) {
-        var data = {
-          max: 1300,
-          data: response
-        };
+			$.getJSON("/api/heatmap" + queries).done(function (response) {
+				var data = {
+					max: 1300,
+					data: response
+				};
 
-        heatmapLayer.setData(data);
-      });
-    }
+				heatmapLayer.setData(data);
+			});
+		}
 
-    refreshMap();
-  });
+		refreshMap();
+	});
 </script>
 
 </html>

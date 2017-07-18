@@ -27,9 +27,15 @@
     <div class="container-fluid">
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li class="dropdown">
-            <button class="btn reset btn-primary">Reset</button>
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link reset" href="#">Reset <span class="sr-only">(current)</span></a>
+          </li>
+          <!-- <li class="dropdown">
+            <button class="btn reset btn-primary">Reset</button>
+          </li> -->
           <li id="time-value-select" class="dropdown" style="display: none;">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="value-dropdown-label">Select Time</span> <span class="caret"></span></a>
             <ul id="time-value-options" class="dropdown-menu">
@@ -39,7 +45,7 @@
       </div>
     </div>
   </nav>
-  <div id="mapid" style="height:92%;"></div>
+  <div id="mapid" style="height: calc(100vh - 50px);"></div>
   <div id="sidebar">
     <h1 id="project_id_title"></h1>
     <h3 id="project_name"></h3>

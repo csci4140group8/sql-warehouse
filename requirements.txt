@@ -1,4 +1,4 @@
 flask==0.12.2
 gunicorn==19.7.1
 sshtunnel==0.1.2
-MySQL-python==1.2.5
+PyMySQL==0.7.11

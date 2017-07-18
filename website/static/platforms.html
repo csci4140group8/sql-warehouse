@@ -43,56 +43,12 @@
 
 <script type="text/javascript">
 	var projects = [];
+	var circle_layer = L.layerGroup([]);
 
 	$(document).ready(function () {
-		$.getJSON("/api/project_ids").done(function (response) {
-			console.log(response);
-			projects = response;
-			$('#project-id-wrapper').empty();
-			response.forEach(function (val) {
-				console.log('appending', val);
-				$('#project-id-wrapper').append('<li><a class="project-id-option" href="#">' + val.project_name + '</a></li>');
-			});
-			$('.project-id-option').click(function (event) {
-				$('#dropdown-label').text(event.target.text)
-				refreshMap();
-			});
-		});
-
-		var cfg = {
-			// radius should be small ONLY if scaleRadius is true (or small radius is intended)
-			// if scaleRadius is false it will be the constant radius used in pixels
-			"radius": 0.1,
-			"maxOpacity": .7,
-			// scales the radius based on map zoom
-			"scaleRadius": true,
-			// if set to false the heatmap uses the global maximum for colorization
-			// if activated: uses the data maximum within the current map boundaries
-			//   (there will always be a red spot with useLocalExtremas true)
-			"useLocalExtrema": false,
-			// which field name in your data represents the latitude - default "lat"
-			latField: 'lat',
-			// which field name in your data represents the longitude - default "lng"
-			lngField: 'lng',
-			// which field name in your data represents the data value - default "value"
-			valueField: 'count'
-		};
-
-		var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-			subdomains: 'abcd',
-			maxZoom: 19
-		});
-
-		var heatmapLayer = new HeatmapOverlay(cfg);
-
-		var mymap = L.map('mapid', {
-			center: new L.LatLng(44.6488, -63.5752),
-			zoom: 7,
-			layers: [positron, heatmapLayer]
-		});
-
 		function refreshMap() {
+			console.log('refreshing');
+
 			var projectName = $('#dropdown-label').text();
 			var projectId;
 
@@ -111,9 +67,51 @@
 					data: response
 				};
 
-				heatmapLayer.setData(data);
+				var marker_color = "#ff7800";
+				var boundary_color = "#00B454";
+
+				mymap.removeLayer(circle_layer);
+
+				circle_layer = L.layerGroup([]);
+
+				response.forEach(function (entry) {
+					var circle = L.circleMarker([entry.lat, entry.lng], {
+						radius: 6,
+						fillColor: marker_color,
+						color: marker_color,
+						weight: 1,
+						opacity: 1,
+						fillOpacity: 0.6,
+					}).addTo(circle_layer);
+				});
+
+				circle_layer.addTo(mymap);
 			});
 		}
+
+		$.getJSON("/api/project_ids").done(function (response) {
+			projects = response;
+			$('#project-id-wrapper').empty();
+			response.forEach(function (val) {
+				$('#project-id-wrapper').append('<li><a class="project-id-option" href="#">' + val.project_name + '</a></li>');
+			});
+			$('.project-id-option').click(function (event) {
+				$('#dropdown-label').text(event.target.text)
+				refreshMap();
+			});
+		});
+
+		var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+			subdomains: 'abcd',
+			maxZoom: 19
+		});
+
+		var mymap = L.map('mapid', {
+			center: new L.LatLng(0, 0),
+			zoom: 2,
+			layers: [positron, circle_layer]
+		});
 
 		refreshMap();
 	});

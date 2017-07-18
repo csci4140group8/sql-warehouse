@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Platform Locations</title>
+
+	<!-- jQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+		crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"a
+		crossorigin="anonymous"></script>
+
+	<!-- Leaflet -->
+	<link rel="stylesheet" href="/js/leaflet/leaflet.css" />
+	<script type="text/javascript" src="/js/leaflet/leaflet.js"></script>
+	<script type="text/javascript" src="/js/heatmap.js"></script>
+	<script type="text/javascript" src="/js/leaflet-heatmap.js"></script>
+</head>
+
+<body>
+	<nav class="navbar-default" style="margin-bottom: 0;">
+		<div class="container-fluid">
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+					</li>
+					<li id="platform-select" class="dropdown">
+						<a href="#" class="dropdwon-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="dropdown-label">All</span>_<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<!-- TODO whatever platforms are selectable -->
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div id="mapid" style="height:calc(100vh - 50px);"></div>
+</body>
+</html>

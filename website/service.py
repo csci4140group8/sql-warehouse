@@ -83,11 +83,11 @@ def getProjects():
 def getPlatforms(project_id):
     where = "WHERE dw_platform_fact.project_id = '%s'" % (project_id) if project_id else ""
     statement = """
-        SELECT dw_location.latitude AS lat, dw_location.longitude AS lng, SUM(dw_platform_fact.count) AS count
+        SELECT dw_location.latitude AS lat, dw_location.longitude AS lng, dw_platform_fact.project_id AS project_id ,SUM(dw_platform_fact.count) AS count
         FROM dw_platform_fact
         JOIN dw_location ON dw_platform_fact.location_id = dw_location.location_id
         %s
-        GROUP BY lat, lng;
+        GROUP BY lat, lng, project_id;
     """ % (where)
 
     return query(statement)

@@ -31,7 +31,8 @@
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="dropdown-label">All</span> <span class="caret"></span></a>
-						<ul id="project-id-wrapper" class="dropdown-menu">
+						<ul id="project-id-wrapper" class="dropdown-menu" style="height: 400px;overflow: scroll;">
+
 						</ul>
 					</li>
 				</ul>
@@ -46,58 +47,57 @@
 	var circle_layer = L.layerGroup([]);
 
 	$(document).ready(function () {
-		function refreshMap() {
-			console.log('refreshing');
+		function refreshMap(pid) {
 
 			var projectName = $('#dropdown-label').text();
-			var projectId;
+			var projectId = pid;
 
-			for (var i = 0; i < projects.length; i++) {
-				if (projects[i].project_name === projectName) {
-					projectId = projects[i].project_id;
-					break;
-				}
-			}
 
 			var queries = projectId ? "?project_id=" + projectId : "";
 
 			$.getJSON("/api/platforms" + queries).done(function (response) {
-				var data = {
-					max: 1300,
-					data: response
-				};
+				if(response.length == 0) {
+					$('#dropdown-label').text("All");
+					alert("There are no platforms for this project.");
+					return;
+				}
 
 				var marker_color = "#ff7800";
 				var boundary_color = "#00B454";
 
 				mymap.removeLayer(circle_layer);
 
-				circle_layer = L.layerGroup([]);
+				circle_layer = L.featureGroup([]);
 
 				response.forEach(function (entry) {
 					var circle = L.circleMarker([entry.lat, entry.lng], {
 						radius: 6,
 						fillColor: marker_color,
-						color: marker_color,
+						color: 'none',
 						weight: 1,
 						opacity: 1,
 						fillOpacity: 0.6,
-					}).addTo(circle_layer);
+					}).bindPopup("<strong>"+entry.project_id+"</strong>: ["+entry.lat+" , "+entry.lng+"]").addTo(circle_layer);
 				});
 
 				circle_layer.addTo(mymap);
+				mymap.fitBounds(circle_layer.getBounds());
 			});
 		}
 
 		$.getJSON("/api/project_ids").done(function (response) {
 			projects = response;
 			$('#project-id-wrapper').empty();
+			$('#project-id-wrapper').append('<li><a class="project-id-option" href="#" data-id="">All</a></li>');
+
+
 			response.forEach(function (val) {
-				$('#project-id-wrapper').append('<li><a class="project-id-option" href="#">' + val.project_name + '</a></li>');
+				$('#project-id-wrapper').append('<li><a class="project-id-option" href="#" data-id="'+val.project_id+'">'+val.project_id+' - ' + val.project_name + '</a></li>');
 			});
 			$('.project-id-option').click(function (event) {
+				var pid = $(this).attr('data-id');
 				$('#dropdown-label').text(event.target.text)
-				refreshMap();
+				refreshMap(pid);
 			});
 		});
 
